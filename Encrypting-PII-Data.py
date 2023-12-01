@@ -11,7 +11,7 @@ encryptionKey = Fernet.generate_key()
 def encrypt_val(clear_text,MASTER_KEY):
     from cryptography.fernet import Fernet
     f = Fernet(MASTER_KEY)
-    clear_text_b=bytes(clear_text, 'utf-8')
+    clear_text_b = bytes(clear_text, 'utf-8')
     cipher_text = f.encrypt(clear_text_b)
     cipher_text = str(cipher_text.decode('ascii'))
     return cipher_text
@@ -36,6 +36,6 @@ encryptedDF = silverDF.withColumn("userId", encrypt("userId",lit(encryptionKey))
 # DBTITLE 1,Writing transformed silver data frame to the silver table
 encryptedDF.writeStream.format("delta") \
 .outputMode("append") \
-.option("checkpointLocation", "/dbfs/pubsub-shippment-sliver-checkpoint/")
+.option("checkpointLocation", "/dbfs/pubsub-shippment-sliver-checkpoint/") \
 .trigger(processingTime = '5 seconds') \
 .table("main.car_demo_data_lake.shipping_sliver")
